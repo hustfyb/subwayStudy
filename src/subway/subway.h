@@ -1,3 +1,3 @@
 #include <string>
 using namespace std;
-void readFile(string fileName);
+int readFile(string fileName);

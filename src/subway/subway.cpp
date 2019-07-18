@@ -6,12 +6,19 @@
 #include <fstream>
 #include "getopt.h"
 #include "subway.h"
-
+#include <map>
+#include "Station.h"
+#include "Line.h"
+#include "Station.h"
+#include <map>
 using namespace std;
 using json = nlohmann::json;
+map<string, shared_ptr<Line>> g_lines;
+StationManage staionManager;
 void printUsage() {
 	cout << "<-map filename> [-o filename]";
 }
+
 
 int readFile(string fileName) {
 	std::ifstream inFile(fileName);
@@ -19,14 +26,36 @@ int readFile(string fileName) {
 	try
 	{
 		inFile >> data;
-		cout << data.dump(4) << std::endl;
+		if (!data.is_array()) {
+			cerr << "线路格式不对。";
+			return -1;
+		}
+		for (auto line : data)
+		{
+			string name = line["name"];
+			shared_ptr<Line> newLine = make_shared<Line>(name);
+			g_lines[name] = newLine;
+			for (auto station : line["stations"]) {
+				if (staionManager.addStation(station, newLine) != 0) {
+					return -1;
+				};
+			}
+		}
+		
 	}
-	catch (const std::exception&e)
+	catch (json::exception e)
 	{
-		cerr << "文件解析错误，请检查文件是否存在，或数据格式是否正确。";
+		cerr << e.what()<<endl;
 		return -1;
 	}
 	return 0;
+}
+
+void dump() {
+	for (auto linePair:g_lines)
+	{
+		linePair.second->dump();
+	}
 }
 int main(int argc ,TCHAR **argv)
 {
@@ -69,7 +98,12 @@ int main(int argc ,TCHAR **argv)
 		printUsage();
 		return -1;
 	}
-	readFile(string(fileName));
+	if (readFile(fileName) == 0) {
+		dump();
+	}
+	else {
+		cout << "读入文件失败,请检查文件是否存在，文件格式是否正确" << endl;
+	};
 }
 
 // 运行程序: Ctrl + F5 或调试 >“开始执行(不调试)”菜单

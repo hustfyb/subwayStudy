@@ -153,12 +153,20 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="getopt.cpp" />
+    <ClCompile Include="Line.cpp" />
+    <ClCompile Include="Station.cpp" />
     <ClCompile Include="subway.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="getopt.h" />
     <ClInclude Include="json.hpp" />
+    <ClInclude Include="Line.h" />
+    <ClInclude Include="Station.h" />
     <ClInclude Include="subway.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="subway.txt" />
+    <Text Include="test.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

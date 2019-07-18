@@ -21,6 +21,12 @@
     <ClCompile Include="getopt.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="Station.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Line.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="json.hpp">
@@ -32,5 +38,15 @@
     <ClInclude Include="getopt.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="Station.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Line.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="subway.txt" />
+    <Text Include="test.txt" />
   </ItemGroup>
 </Project>
