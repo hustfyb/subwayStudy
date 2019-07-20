@@ -1,32 +1,21 @@
 #include "Station.h"
 #include <iostream>
 #include "Line.h"
-
-int StationManage::addStation(string stationName, shared_ptr<Line> line)
+Station::Station(string stationName, string lineName)
+	:name_(stationName)
 {
-	if (!line->hasStation(stationName))
-	{
-		auto stationIter = stations.find(stationName);
-		shared_ptr<Station> station;
-		if (stationIter == stations.end()) {
-			station = make_shared<Station>(stationName, line);
-			stations[stationName] = station;
-		}
-		else {
-			station = stationIter->second;
-		}
-		line->add(stationName);
-	}
-	else
-	{
-		cerr << "线路站点重复" << endl;
-		return -1;
-	}
-	return 0;
+	lines_.insert(stationName);
 }
 
-Station::Station(string stationName, shared_ptr<Line> line)
-	:name(stationName)
+void Station::addLine(string lineName)
 {
-	
+	lines_.insert(lineName);
+}
+
+void Station::setNextStation(shared_ptr<Station> station, string routeLine)
+{
+	NextStation next;
+	next.routeLine = routeLine;
+	next.station = station;
+	nextStations.push_back(next);
 }
