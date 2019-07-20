@@ -13,6 +13,5 @@ public:
 private:
 	string name_;
 	list<string> stations_;
-
 };
 
