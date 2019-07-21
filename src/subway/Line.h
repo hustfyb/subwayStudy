@@ -9,7 +9,7 @@ public:
 	Line(string);
 	bool hasStation(string stationName) const;
 	void add(string stationName);
-	void dump() const;
+	void dump(ostream& stream) const;
 private:
 	string name_;
 	list<string> stations_;

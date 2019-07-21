@@ -8,10 +8,11 @@ class Route
 {
 public:
 	Route(shared_ptr<Station> startStation);
-	void addNextStation(shared_ptr<NextStation> station);
-	list<shared_ptr<Route>> generateNextRoute();
+	int addNextStation(shared_ptr<NextStation> station);
+	int generateNextRoute(list<shared_ptr<Route>>& routes);
 	shared_ptr<Station> getStartStaion();
 	shared_ptr<Station> getEndStaion();
+	void dump();
 private:
 	list<shared_ptr<NextStation>> stations_;
 	int changeCount_;
@@ -26,4 +27,5 @@ private:
 	map<string, shared_ptr<Station>> stations_;
 	list<shared_ptr<Route>> bingoRoutes_;
 	list<shared_ptr<Route>> testRoutes_;
+	void checkRoutes(list<shared_ptr<Route>>& prepareRoute, shared_ptr<Station>);
 };

@@ -14,8 +14,8 @@ void Station::addLine(string lineName)
 
 void Station::setNextStation(shared_ptr<Station> station, string routeLine)
 {
-	NextStation next;
-	next.routeLine = routeLine;
-	next.station = station;
-	nextStations.push_back(next);
+	shared_ptr<NextStation> nextStation=make_shared<NextStation>();
+	nextStation->routeLine = routeLine;
+	nextStation->station = station;
+	nextStations.push_back(nextStation);
 }

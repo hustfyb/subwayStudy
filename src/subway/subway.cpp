@@ -10,6 +10,7 @@
 #include "Station.h"
 #include "Line.h"
 #include "Station.h"
+#include "StationManager.h"
 #include <map>
 using namespace std;
 using json = nlohmann::json;
@@ -60,6 +61,7 @@ int readFile(string fileName) {
 				shared_ptr<Station> newStation = g_stations.getStation(stationName);
 				if (prevStaion) {
 					prevStaion->setNextStation(newStation,lineName);
+					newStation->setNextStation(prevStaion, lineName);//反向路线
 				}
 				prevStaion = newStation;
 			}
@@ -86,6 +88,7 @@ int main(int argc ,TCHAR **argv)
 	string queryLine;
 	string queryRouteStart;
 	string queryRouteEnd;
+	ofstream outStream;
 	static struct option long_options[] =
 	{
 		{(TCHAR*)"map", required_argument,NULL, 'm'},
@@ -109,14 +112,9 @@ int main(int argc ,TCHAR **argv)
 				queryRouteEnd = argv[optind];
 			}
 			break;
-		//case '?':
-		//	if (optopt == 'c')
-		//		_ftprintf(stderr, _T("Option -%c requires an argument.\n"), optopt);
-		//	else if (isprint(optopt))
-		//		_ftprintf(stderr, _T("Unknown option `-%c'.\n"), optopt);
-		//	else
-		//		_ftprintf(stderr, _T("Unknown option character `\\x%x'.\n"), optopt);
-		//	return 1;
+		case 'o':
+			outStream.open(optarg);
+			break;
 		default:
 			printUsage();
 			return 0;
@@ -127,6 +125,7 @@ int main(int argc ,TCHAR **argv)
 		printUsage();
 		return -1;
 	}
+
 	if (readFile(fileName) == 0) {
 		//单一路线查询
 		if (!queryLine.empty()) {
@@ -148,4 +147,5 @@ int main(int argc ,TCHAR **argv)
 	else {
 		cout << "读入文件失败,请检查文件是否存在，文件格式是否正确" << endl;
 	};
+	if (outStream.is_open()) outStream.close();
 }

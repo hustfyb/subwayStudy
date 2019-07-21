@@ -20,12 +20,12 @@ void Line::add(string stationName)
 	stations_.push_back(stationName);
 }
 
-void Line::dump() const
+void Line::dump(ostream &stream=cout) const
 {
 	for (auto staion : stations_)
 	{
-		cout << " " << staion;
+		stream << " " << staion;
 	}
-	cout << endl;
+	stream << endl;
 }
 

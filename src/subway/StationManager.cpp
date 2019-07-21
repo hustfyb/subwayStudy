@@ -40,15 +40,28 @@ int StationManager::queryRoute(string startStationName, string endStationName)
 	testRoutes_.push_back(make_shared<Route>(startStation));
 	while (bingoRoutes_.empty())
 	{
+		list<shared_ptr<Route>> prepareRoute;
 		for (auto route : testRoutes_)
 		{
-			auto nextRoutes = route->generateNextRoute();
+			route->generateNextRoute(prepareRoute);
 		}
-		
-		checkRoute(testRoutes);
+		if (prepareRoute.empty()) break;
+		checkRoutes(prepareRoute, endStation);
+		testRoutes_ = prepareRoute;
 	}
 
 	return 0;
+}
+
+void StationManager::checkRoutes(list<shared_ptr<Route>>& prepareRoute, shared_ptr<Station> endStation)
+{
+	for (auto route : prepareRoute)
+	{
+		if (route->getEndStaion() == endStation) {
+			bingoRoutes_.push_back(route);
+			route->dump();
+		}
+	}
 }
 
 Route::Route(shared_ptr<Station> startStation)
@@ -57,33 +70,58 @@ Route::Route(shared_ptr<Station> startStation)
 	shared_ptr<NextStation> station = make_shared<NextStation>();
 	station->routeLine = "0";
 	station->station = startStation;
-	addNextStation(station);
-}
-
-void Route::addNextStation(shared_ptr<NextStation> station)
-{
 	stations_.push_back(station);
 }
 
-list<shared_ptr<Route>> Route::generateNextRoute()
+int Route::addNextStation(shared_ptr<NextStation> station)
 {
-	list<shared_ptr<Route>> routes;
+	if (station->routeLine != stations_.back()->routeLine) {
+		changeCount_++;
+	}
+	if (find(stations_.begin(), stations_.end(), station) != stations_.end()) {
+		//站点已经存在
+		return -1;
+	}
+	stations_.push_back(station);
+	return 0;
+}
+
+int Route::generateNextRoute(list<shared_ptr<Route>> &routes)
+{
 	shared_ptr<Station> endStaion = getEndStaion();
 	for (auto station : endStaion->nextStations)
 	{
-		shared_ptr<Route> newRoute = make_shared<Route>(shared_ptr)
+		shared_ptr<Route> newRoute = make_shared<Route>(*this);
+		if (newRoute->addNextStation(station) == 0) {
+			routes.push_back(newRoute);
+		};
 	}
-	return routes;
+	return 0;
 }
 
 shared_ptr<Station> Route::getStartStaion()
 {
 	if (stations_.empty()) return nullptr;
-	return ((*stations_.begin())->station);
+	return (stations_.front()->station);
 }
 
 shared_ptr<Station> Route::getEndStaion()
 {
 	if (stations_.empty()) return nullptr;
-	return ((*(stations_.end()--))->station);
+	return (stations_.back()->station);
+}
+
+void Route::dump()
+{
+	if (stations_.empty()) return;
+	cout << changeCount_ << endl;
+	string lineName=stations_.front()->routeLine;
+	for (auto station:stations_)
+	{
+		if (lineName != station->routeLine) {
+			cout << station->routeLine<<endl;
+			lineName = station->routeLine;
+		};
+		cout << station->station->name_ << endl;
+	}
 }
