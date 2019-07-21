@@ -1,7 +1,7 @@
 #include "Station.h"
 #include <iostream>
 #include "Line.h"
-Station::Station(string stationName, string lineName)
+Station::Station(string stationName)
 	:name_(stationName)
 {
 	lines_.insert(stationName);

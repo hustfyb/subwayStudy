@@ -76,12 +76,6 @@ int readFile(string fileName) {
 	return 0;
 }
 
-void dump() {
-	for (auto linePair:g_lines)
-	{
-		linePair.second->dump();
-	}
-}
 int main(int argc ,TCHAR **argv)
 {
 	char* fileName = NULL;
@@ -132,7 +126,7 @@ int main(int argc ,TCHAR **argv)
 			cout << "query line" << endl;
 			auto iter = g_lines.find(queryLine);
 			if (iter != g_lines.end()) {
-				iter->second->dump();
+				outStream.is_open()?iter->second->dump(outStream): iter->second->dump();
 			}
 			else {
 				cout << "线路不存在" << endl;
@@ -140,8 +134,9 @@ int main(int argc ,TCHAR **argv)
 		};
 		//起始路线查询
 		if (!queryRouteStart.empty() && !queryRouteEnd.empty()) {
-			g_stations.queryRoute(queryRouteStart, queryRouteEnd);
-			cout << "query route" << endl;
+			auto route = g_stations.queryRoute(queryRouteStart, queryRouteEnd);
+			if (route) outStream.is_open() ? route->dump(outStream) : route->dump();;
+			
 		}
 	}
 	else {

@@ -30,6 +30,9 @@
     <ClCompile Include="StationManager.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="Route.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="json.hpp">
@@ -48,6 +51,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="StationManager.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Route.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

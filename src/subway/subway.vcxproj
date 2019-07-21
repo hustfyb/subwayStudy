@@ -154,6 +154,7 @@
   <ItemGroup>
     <ClCompile Include="getopt.cpp" />
     <ClCompile Include="Line.cpp" />
+    <ClCompile Include="Route.cpp" />
     <ClCompile Include="Station.cpp" />
     <ClCompile Include="StationManager.cpp" />
     <ClCompile Include="subway.cpp" />
@@ -162,6 +163,7 @@
     <ClInclude Include="getopt.h" />
     <ClInclude Include="json.hpp" />
     <ClInclude Include="Line.h" />
+    <ClInclude Include="Route.h" />
     <ClInclude Include="Station.h" />
     <ClInclude Include="StationManager.h" />
     <ClInclude Include="subway.h" />

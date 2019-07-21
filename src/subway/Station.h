@@ -14,7 +14,7 @@ typedef struct
 class Station
 {
 public:
-	Station(string stationName, string lineName);
+	Station(string stationName);
 	void addLine(string lineName);
 	void setNextStation(shared_ptr<Station> station, string routeLine);
 	list<shared_ptr<NextStation>> nextStations;

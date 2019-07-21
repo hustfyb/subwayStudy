@@ -20,7 +20,7 @@ void Line::add(string stationName)
 	stations_.push_back(stationName);
 }
 
-void Line::dump(ostream &stream=cout) const
+void Line::dump(ostream &stream) const
 {
 	for (auto staion : stations_)
 	{
