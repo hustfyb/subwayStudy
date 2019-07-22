@@ -135,8 +135,9 @@ int main(int argc ,TCHAR **argv)
 		//起始路线查询
 		if (!queryRouteStart.empty() && !queryRouteEnd.empty()) {
 			auto route = g_stations.queryRoute(queryRouteStart, queryRouteEnd);
-			if (route) outStream.is_open() ? route->dump(outStream) : route->dump();;
-			
+			if (route) {
+				outStream.is_open() ? (route->dump(outStream), route->dump()) : route->dump();
+			}
 		}
 	}
 	else {
