@@ -1,5 +1,8 @@
 #include "StationManager.h"
 #include <iostream>
+#include "subway.h"
+#include <nlohmann/json.hpp>
+using json = nlohmann::json;
 
 int StationManager::addStation(string stationName, string lineName)
 {
@@ -18,17 +21,18 @@ std::shared_ptr<Station> StationManager::getStation(string stationName)
 	return ((iter != stations_.end()) ? iter->second : nullptr);
 }
 
-shared_ptr<Route> StationManager::queryRoute(string startStationName, string endStationName)
+pair<QueryErrorCode, shared_ptr<Route>> StationManager::queryRoute(string startStationName, string endStationName)
 {
 	shared_ptr<Station> startStation = getStation(startStationName);
 	shared_ptr<Station> endStation = getStation(endStationName);
 	if (startStation == nullptr) {
 		cerr << "起点找不到" << endl;
-		return nullptr;
+		return (pair <QueryErrorCode, shared_ptr<Route>>(StartNotFound,nullptr));
+	
 	}
 	if (endStation == nullptr) {
 		cerr << "终点找不到" << endl;
-		return nullptr;
+		return (pair <QueryErrorCode, shared_ptr<Route>>(EndNotFound, nullptr));
 	}
 
 	bingoRoutes_.clear();
@@ -47,7 +51,7 @@ shared_ptr<Route> StationManager::queryRoute(string startStationName, string end
 	}
 
 	if (bingoRoutes_.empty()) {
-		return nullptr;
+		return pair <QueryErrorCode, shared_ptr<Route>>(RouteDoesNotExist, nullptr);
 	}
 
 	shared_ptr<Route> minRoute = bingoRoutes_.front();
@@ -57,7 +61,7 @@ shared_ptr<Route> StationManager::queryRoute(string startStationName, string end
 			minRoute = route;
 		}
 	}
-	return minRoute;
+	return (pair <QueryErrorCode, shared_ptr<Route>>(NoError, minRoute));
 }
 
 void StationManager::checkRoutes(list<shared_ptr<Route>>& prepareRoute, shared_ptr<Station> endStation)
@@ -68,4 +72,60 @@ void StationManager::checkRoutes(list<shared_ptr<Route>>& prepareRoute, shared_p
 			bingoRoutes_.push_back(route);
 		}
 	}
+}
+
+int readFile(string fileName, StationManager& stations, map<string, shared_ptr<Line>>& lines)
+{
+	ifstream inFile(fileName);
+	json data;
+	try
+	{
+		inFile >> data;
+		if (!data.is_array()) {
+			cerr << "线路格式不对。";
+			return -1;
+		}
+		for (auto line : data)
+		{
+			string lineName = line["name"];
+			shared_ptr<Line> newLine = make_shared<Line>(lineName);
+			if (!lines[lineName]) {
+				lines[lineName] = newLine;
+			}
+			else
+			{
+				cerr << "线路重复" << endl;
+				return -1;
+			}
+			shared_ptr<Station> prevStaion;
+			for (auto stationName : line["stations"])
+			{
+				if (!newLine->hasStation(stationName))
+				{
+					if (stations.addStation(stationName, lineName) != 0)
+					{
+						return -1;
+					};
+					newLine->add(stationName);
+				}
+				else {
+					cerr << "线路站点重复" << endl;
+					return -1;
+				}
+				shared_ptr<Station> newStation = stations.getStation(stationName);
+				if (prevStaion) {
+					prevStaion->setNextStation(newStation, lineName);
+					newStation->setNextStation(prevStaion, lineName);//反向路线
+				}
+				prevStaion = newStation;
+			}
+		}
+
+	}
+	catch (json::exception e)
+	{
+		cerr << e.what() << endl;
+		return -1;
+	}
+	return 0;
 }

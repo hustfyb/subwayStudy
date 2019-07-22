@@ -1,0 +1,22 @@
+[
+    {
+        "name":"1",
+        "stations":["a","b","c","d"]
+    },
+    {
+        "name":"2",
+        "stations":["b","e","g","i"]
+    },
+    {
+        "name":"3",
+        "stations":["d","f","h","j"]
+    },
+    {
+        "name":"4",
+        "stations":["e","f"]
+    },
+    {
+        "name":"5",
+        "stations":["m","n"]
+    }
+]

@@ -6,7 +6,7 @@
 #include "Line.h"
 using namespace std;
 class Station;
-typedef struct  
+typedef struct
 {
 	string routeLine;
 	shared_ptr<Station> station;

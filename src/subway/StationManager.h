@@ -5,12 +5,17 @@
 #include "Station.h"
 #include "Route.h"
 using namespace std;
-
+typedef enum {
+	NoError = 0,
+	StartNotFound,
+	EndNotFound,
+	RouteDoesNotExist
+}QueryErrorCode;
 class StationManager {
 public:
 	int addStation(string stationName, string lineName);
 	shared_ptr<Station> getStation(string stationName);
-	shared_ptr<Route> queryRoute(string startStation, string endStation);
+	pair<QueryErrorCode,shared_ptr<Route>> queryRoute(string startStation, string endStation);
 private:
 	map<string, shared_ptr<Station>> stations_;
 	list<shared_ptr<Route>> bingoRoutes_;
