@@ -4,13 +4,13 @@
 Station::Station(string stationName)
 	:name_(stationName)
 {
-	lines_.insert(stationName);
+	//lines_.insert(stationName);
 }
 
-void Station::addLine(string lineName)
-{
-	lines_.insert(lineName);
-}
+//void Station::addLine(string lineName)
+//{
+//	liknes_.insert(lineName);
+//}
 
 void Station::setNextStation(shared_ptr<Station> station, string routeLine)
 {

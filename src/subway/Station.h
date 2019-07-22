@@ -19,6 +19,6 @@ public:
 	void setNextStation(shared_ptr<Station> station, string routeLine);
 	list<shared_ptr<NextStation>> nextStations;
 	string name_;
-private:
-	set<string> lines_;
+//private:
+//	set<string> lines_;
 };

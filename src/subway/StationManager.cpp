@@ -9,10 +9,6 @@ int StationManager::addStation(string stationName, string lineName)
 		station = make_shared<Station>(stationName);
 		stations_[stationName] = station;
 	}
-	else {
-		station = stationIter->second;
-		station->addLine(lineName);
-	}
 	return 0;
 }
 
